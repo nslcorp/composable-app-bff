@@ -1,26 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import axios from 'axios';
+import * as https from 'https';
+import { stringify as stringifyQS } from 'qs';
+
+const apiUrl = 'https://magento.test/rest/all/V1/products?';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
-  }
-
-  findAll() {
-    return `This action returns all products`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
-  }
-
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async findByID(id) {
+    const params = {
+      search_criteria: {
+        filter_groups: [
+          {
+            filters: [
+              {
+                field: 'type_id',
+                value: 'configurable',
+                condition_type: 'eq',
+              },
+              {
+                field: 'category_id',
+                value: id, // here you have to provide id of selected category
+                condition_type: 'in',
+              },
+            ],
+          },
+        ],
+        page_size: 10,
+        current_page: 0,
+      },
+    };
+    const productsResponse = await axios.get(apiUrl + stringifyQS(params), {
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false,
+      }),
+    });
+    const products = productsResponse.data.items;
+    return products;
   }
 }
