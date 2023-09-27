@@ -6,11 +6,18 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get('/:id')
-  findAll(@Param('id') id: string) {
+  getProducts(@Param('id') id: string) {
     console.log(id);
     if (!id) {
       throw new NotFoundException('Missing mandatory param: id');
     }
-    return this.productsService.findByID(id);
+    return this.productsService.getProductById(id);
   }
+
+  @Get("/variants/:id")
+  getVariants(@Param('id') id: string){
+    return this.productsService.getProductsByCategory(['23']);
+  }
+
+
 }

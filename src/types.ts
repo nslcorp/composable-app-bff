@@ -1,6 +1,8 @@
 export interface Category {
   id: number;
   name: string;
+  product_count: number;
+  abcd: any;
   ancestors: any;
   parent: {
     id: number;
@@ -9,12 +11,60 @@ export interface Category {
 
 export interface CategoryMagento {
   id: number;
-  "parent_id": number,
-  "name": string
-  "is_active": boolean,
-  "position": number
-  "level": number
-  "product_count": number
-  "children_data": CategoryMagento[]
+  parent_id: number;
+  name: string;
+  is_active: boolean;
+  position: number;
+  level: number;
+  product_count: number;
+  children_data: CategoryMagento[];
+}
 
+export interface MagentoProduct {
+  id: number;
+  sku: string;
+  name: string;
+  attribute_set_id: string;
+  price: number;
+  status: number;
+  visibility: number;
+  type_id: string;
+  created_at: string;
+  updated_at: string;
+  custom_attributes: {
+    attribute_code: string;
+    value: string;
+  }[];
+  extension_attributes: any;
+  variants?: ProductVariantMagento[];
+}
+
+export interface Product {
+  id: string;
+  description: string;
+  slug: any;
+  name: string,
+  variants?: ProductVariant[];
+
+  // price: number,
+  // sizes: string[];
+  // colors: string[];
+}
+
+export interface ProductVariantMagento {}
+
+export interface ProductVariant {
+  id: string;
+  sku: string;
+  prices: {
+    value: { currencyCode: string; centAmount: number };
+  }[];
+  images: {
+    url: string;
+  }[];
+  attributes: {
+    color: string;
+    size: string;
+  }[];
+  slug: string;
 }
