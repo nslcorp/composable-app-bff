@@ -18,8 +18,10 @@ export class CategoriesService {
           rejectUnauthorized: false,
         }),
       });
-      const data = mapCategories(response.data.children_data);
-      return data;
+
+      const data = response.data.children_data.filter((record) => record.name === 'Women');
+      const mappedData = mapCategories(data);
+      return mappedData;
     } catch (error) {
       console.log(error);
 

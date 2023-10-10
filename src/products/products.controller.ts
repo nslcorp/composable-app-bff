@@ -7,7 +7,6 @@ export class ProductsController {
 
   @Get('/:id')
   getProducts(@Param('id') id: string) {
-    console.log(id);
     if (!id) {
       throw new NotFoundException('Missing mandatory param: id');
     }

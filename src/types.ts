@@ -2,8 +2,7 @@ export interface Category {
   id: number;
   name: string;
   product_count: number;
-  abcd: any;
-  ancestors: any;
+  ancestors?: any;
   parent: {
     id: number;
   };
@@ -67,4 +66,9 @@ export interface ProductVariant {
     size: string;
   }[];
   slug: string;
+}
+
+export interface AddCartItem {
+  sku: string;
+  qty: string;
 }

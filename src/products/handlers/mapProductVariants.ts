@@ -8,7 +8,7 @@ export const mapProductVariants = (data: any) => {
       id: record.id.toString(),
       sku: record.sku,
       prices: [
-        { value: { currencyCode: 'USD', centAmount: record.price * 100 } },
+        { value: { currencyCode: 'USD', centAmount: record.price } },
       ],
       images: [
         {
