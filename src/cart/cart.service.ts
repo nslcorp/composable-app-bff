@@ -37,19 +37,23 @@ export class CartService {
         }),
       });
 
+      const lineItems = response.data.items
+        ? response.data.items.map((item) => ({
+            id: item.item_id.toString(),
+            quantity: item.qty,
+            totalPrice: item.qty * item.price,
+            variant: {
+              sku: item.sku,
+              name: item.name,
+              prices: [{ value: { currencyCode: 'USD', centAmount: item.price * 100 } }],
+            },
+          }))
+        : [];
+
       const cartData = {
         id: response.data.id.toString(),
         customerId: response.data.customer.email,
-        lineItems: response.data.items.map((item) => ({
-          id: item.item_id.toString(),
-          quantity: item.qty,
-          totalPrice: item.qty * item.price,
-          variant: {
-            sku: item.sku,
-            name: item.name,
-            prices: [{ value: { currencyCode: 'USD', centAmount: item.price * 100 } }],
-          },
-        })),
+        lineItems,
       };
 
       return cartData;
@@ -133,16 +137,77 @@ export class CartService {
 
   async putOrder(cartId: string) {
     const apiUrl = `${baseUrl}/${cartId}/order`;
+
     try {
-      const response = await axios.put(apiUrl, {
-        paymentMethod: {
-          method: 'checkmo',
+      await this.setShippingAddress(cartId)
+
+
+      const response = await axios.put(
+        apiUrl,
+        {
+          paymentMethod: {
+            method: 'checkmo',
+          },
         },
-      });
+        {
+          httpsAgent: new https.Agent({
+            rejectUnauthorized: false,
+          }),
+        },
+      );
       return response.data;
     } catch (error) {
+      console.log(error);
       const message = error.response.data.message || 'Unhandled error';
       throw new HttpException(message, error.response.status);
+    }
+  }
+
+  async setShippingAddress(cartId: string) {
+    const apiUrl = `${baseUrl}/${cartId}/shipping-information`;
+    console.log(apiUrl);
+    try {
+      const response = await axios.post(
+        apiUrl,
+        {
+          addressInformation: {
+            shipping_address: {
+              region: 'Berlin',
+              region_code: 'BER',
+              country_id: 'DE',
+              street: ['Kurfursterdamm 194'],
+              telephone: '015712345679',
+              postcode: '10285',
+              city: 'Berlin',
+              firstname: 'Name',
+              lastname: 'Lastname',
+              email: 'nuccccll@gmail.com',
+            },
+            billing_address: {
+              region: 'Berlin',
+              region_code: 'BER',
+              country_id: 'DE',
+              street: ['Kurfursterdamm 194'],
+              telephone: '015712345679',
+              postcode: '10285',
+              city: 'Berlin',
+              firstname: 'Name',
+              lastname: 'Lastname',
+              email: 'nuccccll@gmail.com',
+            },
+            shipping_method_code: 'flatrate',
+            shipping_carrier_code: 'flatrate',
+          },
+        },
+        {
+          httpsAgent: new https.Agent({
+            rejectUnauthorized: false,
+          }),
+        },
+      );
+      return response.data
+    } catch (error) {
+      console.error('Error:', error.response.message);
     }
   }
 }

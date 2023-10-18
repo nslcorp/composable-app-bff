@@ -10,7 +10,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
+import { CategoriesService } from './services/CategoriesService';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('categories')
@@ -24,7 +24,7 @@ export class CategoriesController {
 
   @Get()
   async findAll() {
-    const data = await this.categoriesService.findAll();
+    const data = await this.categoriesService.fetchAll();
     return data;
   }
 }

@@ -1,9 +1,23 @@
 import { Module } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
 import { CategoriesController } from './categories.controller';
+import { getDataProvider } from '../utils/getDataProvider';
+import { NodeDataProvider } from '../types';
+import { CategoriesServiceCommerce } from './services/CategoriesServiceCommerce';
+import { CategoriesServiceMagento } from './services/CategoriesServiceMagento';
+import { CategoriesService } from './services/CategoriesService';
+import { CommercetoolsSDK } from '../shared/CommercetoolSDK';
 
 @Module({
   controllers: [CategoriesController],
-  providers: [CategoriesService]
+  providers: [
+    {
+      provide: CategoriesService,
+      useClass:
+        getDataProvider() === NodeDataProvider.COMMERCE_TOOLS
+          ? CategoriesServiceCommerce
+          : CategoriesServiceMagento,
+    },
+    CommercetoolsSDK,
+  ],
 })
 export class CategoriesModule {}

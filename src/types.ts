@@ -1,10 +1,15 @@
+export enum NodeDataProvider {
+  COMMERCE_TOOLS = 'commerceTools',
+  MAGENTO = 'magento',
+}
+
 export interface Category {
-  id: number;
+  id: number | string;
   name: string;
   product_count: number;
   ancestors?: any;
   parent: {
-    id: number;
+    id: number | string;
   };
 }
 
