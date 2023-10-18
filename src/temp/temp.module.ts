@@ -5,7 +5,7 @@ import { TempService } from './services/TempService';
 import { getDataProvider } from '../utils/getDataProvider';
 import { NodeDataProvider } from '../types';
 import { TempMagentoService } from './services/TempMagentoService';
-import { CommercetoolsSDK } from '../shared/CommercetoolSDK';
+import { CommercetoolsSDK } from '../utils/CommercetoolSDK';
 
 const getProviderClass = () => {
   const dataProvider = getDataProvider();

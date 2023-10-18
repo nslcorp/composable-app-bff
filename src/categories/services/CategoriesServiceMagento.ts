@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CategoriesService } from './CategoriesService';
-import { mapCategoriesFromMagento } from './handler/mapCategoriesFromMagento';
+import { mapCategoriesFromMagento } from './handlers/mapCategoriesFromMagento';
 import { axiosRequest } from '../../utils/axiosRequest';
 import { handleErrors } from '../../utils/handleErrors';
 

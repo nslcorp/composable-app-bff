@@ -32,6 +32,7 @@ export class CommercetoolsSDK {
       .withProjectKey(projectKey) // .withProjectKey() is not required if the projectKey is included in authMiddlewareOptions
       .withClientCredentialsFlow(authMiddlewareOptions)
       .withHttpMiddleware(httpMiddlewareOptions)
+      // .withLoggerMiddleware()
       .build();
 
     this.api = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });

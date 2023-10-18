@@ -1,6 +1,6 @@
 import { TempService } from './TempService';
 import { Injectable } from '@nestjs/common';
-import { CommercetoolsSDK } from '../../shared/CommercetoolSDK';
+import { CommercetoolsSDK } from '../../utils/CommercetoolSDK';
 import * as process from 'process';
 
 @Injectable()

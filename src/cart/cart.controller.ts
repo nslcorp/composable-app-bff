@@ -1,17 +1,11 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { CartService } from './cart.service';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { CartService } from "./services/CartService";
 
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
+
+
 
   @Get('/:cartId')
   async getCart(@Param('cartId') cartId: string) {
@@ -34,20 +28,15 @@ export class CartController {
   }
 
   @Delete('/:cartId/items/:itemId')
-  async removeItemFromCart(
-    @Param('cartId') cartId: string,
-    @Param('itemId') itemId: string,
-  ) {
+  async removeItemFromCart(@Param('cartId') cartId: string, @Param('itemId') itemId: string) {
     return this.cartService.removeItemFromCart(cartId, itemId);
   }
 
-
-
   // Put Order
-  @Put("/:cartId/order")
-  async putOrder(@Param("cartId") cartId: string){
+  @Put('/:cartId/order')
+  async putOrder(@Param('cartId') cartId: string) {
     console.log(cartId);
-    return this.cartService.putOrder(cartId)
+    return this.cartService.putOrder(cartId);
   }
 
   @Post('/')

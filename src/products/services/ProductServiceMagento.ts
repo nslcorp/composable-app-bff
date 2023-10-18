@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import axios from 'axios';
-import * as https from 'https';
+import { ProductService } from './ProductService';
+import { Product } from '../../types';
+import axios from 'axios/index';
 import { stringify as stringifyQS } from 'qs';
-import { mapProducts } from './services/handlers/mapProducts';
-import { mapProductVariants } from './services/handlers/mapProductVariants';
-
-const apiUrl = 'https://magento.test/rest/all/V1/products?';
+import https from 'https';
+import { mapProducts } from './handlers/mapProducts';
+import { mapProductVariants } from './handlers/mapProductVariants';
+import { axiosRequest } from '../../utils/axiosRequest';
 
 @Injectable()
-export class ProductsService {
-  async getProductById(id) {
+export class ProductServiceMagento extends ProductService {
+  async getProductById(categoryId: string): Promise<Product[]> {
     const params = {
       search_criteria: {
         filter_groups: [
@@ -22,7 +23,7 @@ export class ProductsService {
               },
               {
                 field: 'category_id',
-                value: id, // here you have to provide id of selected category
+                value: categoryId, // here you have to provide id of selected category
                 condition_type: 'in',
               },
             ],
@@ -32,11 +33,7 @@ export class ProductsService {
         current_page: 0,
       },
     };
-    const productsResponse = await axios.get(apiUrl + stringifyQS(params), {
-      httpsAgent: new https.Agent({
-        rejectUnauthorized: false,
-      }),
-    });
+    const productsResponse = await axiosRequest.get('products?' + stringifyQS(params));
     const products = productsResponse.data.items;
 
     const variantIds = products.reduce((ids, product) => {
@@ -53,17 +50,12 @@ export class ProductsService {
     // console.log(variants);
 
     const productsWithVariants = products.map((product) => {
-      const productLinks =
-        product.extension_attributes.configurable_product_links.map((id) =>
-          id.toString(),
-        );
+      const productLinks = product.extension_attributes.configurable_product_links.map((id) => id.toString());
       if (
         product.extension_attributes.configurable_product_links &&
         product.extension_attributes.configurable_product_links.length > 0
       ) {
-        const productVariants = variants.filter((variant) =>
-          productLinks.includes(variant.id),
-        );
+        const productVariants = variants.filter((variant) => productLinks.includes(variant.id));
         product.variants = productVariants;
       }
       return product;
@@ -89,11 +81,7 @@ export class ProductsService {
           ],
         },
       };
-      const response = await axios.get(apiUrl + stringifyQS(params), {
-        httpsAgent: new https.Agent({
-          rejectUnauthorized: false,
-        }),
-      });
+      const response = await axiosRequest.get('products?' + stringifyQS(params));
       return mapProductVariants(response.data.items);
     } catch (error) {
       throw new Error('Error fetching variants: ' + error.message);

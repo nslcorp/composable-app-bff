@@ -1,12 +1,14 @@
 import { CategoriesService } from './CategoriesService';
 import { Injectable } from '@nestjs/common';
 import { handleErrors } from '../../utils/handleErrors';
-import { CommercetoolsSDK } from '../../shared/CommercetoolSDK';
-import { mapCategoriesFromCommerce } from "./handler/mapCateforiesFromCommerce";
+import { CommercetoolsSDK } from '../../utils/CommercetoolSDK';
+import { mapCategoriesFromCommerce } from "./handlers/mapCateforiesFromCommerce";
 
 @Injectable()
-export class CategoriesServiceCommerce implements CategoriesService {
-  constructor(private readonly commerceSdk: CommercetoolsSDK) {}
+export class CategoriesServiceCommerce extends CategoriesService {
+  constructor(private readonly commerceSdk: CommercetoolsSDK) {
+    super();
+  }
 
   async fetchAll(): Promise<any[]> {
     try {

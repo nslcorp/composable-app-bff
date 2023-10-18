@@ -1,4 +1,4 @@
-import { MagentoProduct, Product, ProductVariant } from '../../types';
+import { MagentoProduct, Product, ProductVariant } from '../../../types';
 
 export const mapProducts = (magentoProducts: MagentoProduct[]) => {
   return magentoProducts.map((record) => {

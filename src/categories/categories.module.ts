@@ -5,7 +5,7 @@ import { NodeDataProvider } from '../types';
 import { CategoriesServiceCommerce } from './services/CategoriesServiceCommerce';
 import { CategoriesServiceMagento } from './services/CategoriesServiceMagento';
 import { CategoriesService } from './services/CategoriesService';
-import { CommercetoolsSDK } from '../shared/CommercetoolSDK';
+import { CommercetoolsSDK } from '../utils/CommercetoolSDK';
 
 @Module({
   controllers: [CategoriesController],

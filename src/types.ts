@@ -58,7 +58,7 @@ export interface Product {
 export interface ProductVariantMagento {}
 
 export interface ProductVariant {
-  id: string;
+  id: string | number;
   sku: string;
   prices: {
     value: { currencyCode: string; centAmount: number };

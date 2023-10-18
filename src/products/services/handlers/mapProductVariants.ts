@@ -1,4 +1,4 @@
-import { ProductVariant } from '../../types';
+import { ProductVariant } from '../../../types';
 
 const urlPrefix  = 'https://magento.test/media/catalog/product'
 
