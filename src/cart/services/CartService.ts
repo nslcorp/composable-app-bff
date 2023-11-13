@@ -1,5 +1,5 @@
-import { AddCartItem } from "../../types";
-import { Injectable } from "@nestjs/common";
+import { AddCartItem, Cart } from '../../types';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export abstract class CartService {
@@ -7,11 +7,10 @@ export abstract class CartService {
     throw new Error('Method not implemented.');
   }
   async getCart(cartId: string): Promise<any> {}
-  async addItemToCart(cartId: string, data: AddCartItem) {}
-  async changeItemsAtCart(cartId: string, itemId: string, data: { qty: number }) {}
-  async removeItemFromCart(cartId: string, itemId: string) {}
+  async addItemToCart(cartId: string, data: AddCartItem): Promise<any> {}
+  async changeItemsAtCart(cartId: string, itemId: string, data: { qty: number }): Promise<any> {}
+  async removeItemFromCart(cartId: string, itemId: string): Promise<any> {}
 
-
-  async putOrder(cartId: string) {}
-  async setShippingAddress(cartId: string) {}
+  async putOrder(cartId: string): Promise<any> {}
+  async setShippingAddress(cartId: string): Promise<any> {}
 }

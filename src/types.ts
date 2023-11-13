@@ -47,7 +47,7 @@ export interface Product {
   id: string;
   description: string;
   slug: any;
-  name: string,
+  name: string;
   variants?: ProductVariant[];
 
   // price: number,
@@ -57,12 +57,17 @@ export interface Product {
 
 export interface ProductVariantMagento {}
 
+export interface PriceValue {
+  value: {
+    currencyCode: string;
+    centAmount: number;
+  };
+}
+
 export interface ProductVariant {
   id: string | number;
   sku: string;
-  prices: {
-    value: { currencyCode: string; centAmount: number };
-  }[];
+  prices: PriceValue[];
   images: {
     url: string;
   }[];
@@ -76,4 +81,26 @@ export interface ProductVariant {
 export interface AddCartItem {
   sku: string;
   qty: string;
+}
+
+export interface Cart {
+  id: string;
+  customerId: string;
+  version?: number;
+  lineItems: CartLineItems[];
+}
+
+export interface CartLineItems {
+  id: string;
+  quantity: number;
+  totalPrice: number;
+  variant: {
+    sku: string;
+    name: string;
+    prices: PriceValue[];
+  };
+}
+
+export interface Order {
+  id: string
 }

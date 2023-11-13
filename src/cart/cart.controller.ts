@@ -35,7 +35,6 @@ export class CartController {
   // Put Order
   @Put('/:cartId/order')
   async putOrder(@Param('cartId') cartId: string) {
-    console.log(cartId);
     return this.cartService.putOrder(cartId);
   }
 

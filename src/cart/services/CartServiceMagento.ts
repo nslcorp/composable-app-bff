@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { axiosRequest } from '../../utils/axiosRequest';
-import { AddCartItem } from '../../types';
+import { AddCartItem, Cart, CartLineItems, Order } from "../../types";
 import { handleErrors } from '../../utils/handleErrors';
 import { CartService } from './CartService';
 
@@ -23,19 +23,22 @@ export class CartServiceMagento implements CartService {
       const response = await axiosRequest.get(`guest-carts/${cartId}`);
 
       const lineItems = response.data.items
-        ? response.data.items.map((item) => ({
-            id: item.item_id.toString(),
-            quantity: item.qty,
-            totalPrice: item.qty * item.price,
-            variant: {
-              sku: item.sku,
-              name: item.name,
-              prices: [{ value: { currencyCode: 'USD', centAmount: item.price * 100 } }],
-            },
-          }))
+        ? response.data.items.map((item) => {
+            const data: CartLineItems = {
+              id: item.item_id.toString(),
+              quantity: item.qty,
+              totalPrice: item.qty * item.price,
+              variant: {
+                sku: item.sku,
+                name: item.name,
+                prices: [{ value: { currencyCode: 'USD', centAmount: item.price * 100 } }],
+              },
+            };
+            return data;
+          })
         : [];
 
-      const cartData = {
+      const cartData: Cart = {
         id: response.data.id.toString(),
         customerId: response.data.customer.email,
         lineItems,
@@ -91,7 +94,7 @@ export class CartServiceMagento implements CartService {
     }
   }
 
-  async putOrder(cartId: string) {
+  async putOrder(cartId: string): Promise<Order> {
     try {
       await this.setShippingAddress(cartId);
 
@@ -100,7 +103,8 @@ export class CartServiceMagento implements CartService {
           method: 'checkmo',
         },
       });
-      return response.data;
+      const data = { id: response.data };
+      return data;
     } catch (error) {
       handleErrors(error);
     }
